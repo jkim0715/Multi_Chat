@@ -8,6 +8,8 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
+
+// socket만들고 reciver 받을준비, scanner로 입력받아 key in 하면 sender에 의해 메시지 보내기
 public class Client {
 
 	Socket socket;
@@ -17,7 +19,7 @@ public class Client {
 
 	}
 
-	public Client(String ip, int port) throws Exception {
+	public Client(String ip, int port) throws IOException {
 		boolean flag = true;
 		while (flag) {
 			try {
@@ -25,7 +27,7 @@ public class Client {
 				if (socket != null && socket.isConnected()) {
 					break;
 				}
-			} catch (IOException e) {
+			} catch (Exception e) { // 서버가 안켜져있으면
 				System.out.println("Re-Try");
 				try {
 					Thread.sleep(3000);
@@ -33,49 +35,48 @@ public class Client {
 					e1.printStackTrace();
 				}
 			}
-		} // END while
+		} // End while
 		new Receiver(socket).start();
 	}
-	
-	public void sendMsg(String msg) throws Exception {
+
+	public void sendMsg(String msg) throws IOException {
 		Sender sender = null;
 		sender = new Sender(socket);
 		sender.setMsg(msg);
 		sender.start();
 	}
-
-	public void strat() throws Exception {
+	
+	public void start() throws Exception {
 		Scanner sc = new Scanner(System.in);
 		boolean sflag = true;
 		while (sflag) {
 			System.out.println("Input Msg.");
-			String str = sc.nextLine();
+			String str = sc.next();
 			sendMsg(str);
 			if(str.equals("q")) {
 				break;
 			}
 		}
+		sc.close();
 	}
 
+	// Inner Class
 	class Sender extends Thread {
 		Socket socket;
 		OutputStream out;
 		DataOutputStream dout;
 		String msg;
-		
-		public Sender() {
-		}
 
-		public Sender(Socket socket) throws Exception{
-			this.socket = socket;
-			out =socket.getOutputStream();
+		public Sender(Socket socket) throws IOException {
+//			this.socket = socket;
+			out = socket.getOutputStream();
 			dout = new DataOutputStream(out);
 		}
 		
 		public void setMsg(String msg) {
 			this.msg = msg;
 		}
-
+		
 		public void run() {
 			if(dout != null) {
 				try {
@@ -85,22 +86,17 @@ public class Client {
 				}
 			}
 		}
-	} // END Sender
+	}
 
 	class Receiver extends Thread {
 		Socket socket;
 		InputStream in;
 		DataInputStream din;
 
-		public Receiver() {
-		}
-
-		// Receive data from server
 		public Receiver(Socket socket) throws IOException {
 			this.socket = socket;
 			in = socket.getInputStream();
 			din = new DataInputStream(in);
-
 		}
 
 		public void run() {
@@ -112,20 +108,18 @@ public class Client {
 			} catch (Exception e) {
 
 			}
-
 		}
-	}// END Receiver
+	}
 
 	public static void main(String[] args) {
 		Client client = null;
 
 		try {
-			client = new Client("70.12.60.106", 8888);
-			client.strat();
+			client = new Client("70.12.60.110", 8888);
+			client.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 }
