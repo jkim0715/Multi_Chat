@@ -1,7 +1,9 @@
 package com.example.webserversocketexcersice;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,10 +22,7 @@ public class MainActivity extends AppCompatActivity {
     Socket socket = null;
     OutputStream out;
     DataOutputStream dout;
-    String msg;
-
-    InputStream in;
-    DataInputStream din;
+    ReceiveThread receiveThread;
 
     TextView textView;
     EditText editText;
@@ -35,40 +34,24 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
         editText = findViewById(R.id.msg);
 
-        Thread receiveThread = new Thread(new Runnable() {
-            public void setStream() throws IOException {
-                try {
-                    socket = new Socket("70.12.60.108", 8888);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                in = socket.getInputStream();
-                din = new DataInputStream(in);
-            }
-            @Override
-            public void run() {
-                try {
-                    setStream();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    while (true) {
-                        String str = din.readUTF();
-                        textView.setText(textView.getText().toString()+"\n"+str);
-                    }
-                } catch (Exception e) {
+        receiveThread = new ReceiveThread("70.12.60.95",8888);
 
-                }
-
-
-            }
-        });
-        receiveThread.start();
+        if(receiveThread!=null){
+            receiveThread.execute();
+        }
     }
 
-    public void SendClick(View v) throws IOException {
-        Thread sendThread = new Thread(new Runnable() {
+    @Override
+    protected void onDestroy() {
+        sendProgress("q");
+        super.onDestroy();
+    }
+    void sendProgress(String text){
+        final String msg = text;
+        if(msg.equals("q")){
+            receiveThread.cancel(true);
+        }
+        final Thread sendThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -79,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 dout = new DataOutputStream(out);
                 if (dout != null) {
                     try {
-                        dout.writeUTF(editText.getText().toString());
+                        dout.writeUTF(msg);
                         editText.setText("");
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -89,4 +72,58 @@ public class MainActivity extends AppCompatActivity {
         });
         sendThread.start();
     }
+    public void SendClick(View v) throws IOException {
+        sendProgress(editText.getText().toString());
+    }
+    class ReceiveThread extends AsyncTask<String,Object,Integer>{
+
+        Socket socket1;
+        InputStream in;
+        DataInputStream din;
+        String ip;
+        int port;
+
+        public ReceiveThread(String ip, int port) {
+            this.ip = ip;
+            this.port = port;
+        }
+
+        @Override
+        protected void onProgressUpdate(Object... values) {
+            String cmd = (String)values[0];
+            Log.d("cmd",cmd);
+            if(cmd.equals("socket")){
+                socket = (Socket)values[1];
+            }
+            else {
+                textView.setText(textView.getText().toString()  + (String) values[1] + "\n");
+            }
+        }
+
+        @Override
+        protected Integer doInBackground(String... strings) {
+            try {
+                socket1 = new Socket(ip,port);
+                socket = socket1;
+                in = socket1.getInputStream();
+                Object[] container = {new String("socket"),socket1};
+                publishProgress(container);
+                din = new DataInputStream(in);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                while (true) {
+                    final String str = din.readUTF();
+                    Log.d("deceive", str);
+                    System.out.println("receice thread is running");
+                    publishProgress(new String("message"),str);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
 }
