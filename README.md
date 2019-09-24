@@ -14,7 +14,7 @@ This Repository is for chatting program called MulChat
 - Web Server & Web Browser : [test](/test)
   - ChatServlet.java
   - chat.jsp
-- Android App : [WebServerSocketExersice](/WebServerSocketExersice)
+- Android App : [WebServerSocketExercise](/WebServerSocketExcersice)
   - MainActivity
 
 
