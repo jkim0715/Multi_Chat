@@ -8,13 +8,13 @@ This Repository is for chatting program called MulChat
 
 ![System_Architecture](./img/System_Architecture.png)
 
-- ChattingServer & Client Application : [ChattingServer](/chattingserver)
+- ChattingServer & Client Application : [ChattingServer](/ChattingServer)
   - Client.java
   - Server.java
 - Web Server & Web Browser : [test](/test)
   - ChatServlet.java
   - chat.jsp
-- Android App : [WebServerSocketExersice](/webserversocketexersice)
+- Android App : [WebServerSocketExersice](/WebServerSocketExersice)
   - MainActivity
 
 
