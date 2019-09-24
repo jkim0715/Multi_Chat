@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 
-// socket����� reciver �����غ�, scanner�� �Է¹޾� key in �ϸ� sender�� ���� �޽��� ������
+
 public class Client {
 
 	Socket socket;
@@ -116,7 +116,7 @@ public class Client {
 
 		try {
 			client = new Client("70.12.60.108", 8888);
-			client.strat();
+			client.start();
 
 		} catch (Exception e) {
 			e.printStackTrace();
