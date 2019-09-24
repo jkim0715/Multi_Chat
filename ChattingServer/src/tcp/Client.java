@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 
-// socket¸¸µé°í reciver ¹ÞÀ»ÁØºñ, scanner·Î ÀÔ·Â¹Þ¾Æ key in ÇÏ¸é sender¿¡ ÀÇÇØ ¸Þ½ÃÁö º¸³»±â
+
 public class Client {
 
 	Socket socket;
@@ -27,7 +27,7 @@ public class Client {
 				if (socket != null && socket.isConnected()) {
 					break;
 				}
-			} catch (Exception e) { // ¼­¹ö°¡ ¾ÈÄÑÁ®ÀÖÀ¸¸é
+			} catch (Exception e) { // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				System.out.println("Re-Try");
 				try {
 					Thread.sleep(3000);
@@ -115,8 +115,9 @@ public class Client {
 		Client client = null;
 
 		try {
-			client = new Client("70.12.60.110", 8888);
+			client = new Client("70.12.60.108", 8888);
 			client.start();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

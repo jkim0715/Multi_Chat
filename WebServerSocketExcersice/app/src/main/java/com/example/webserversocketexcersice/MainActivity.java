@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -33,8 +34,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         textView = findViewById(R.id.textView);
         editText = findViewById(R.id.msg);
-
-        receiveThread = new ReceiveThread("70.12.60.95",8888);
+        textView.setVerticalScrollBarEnabled(true);
+        textView.setMovementMethod(new ScrollingMovementMethod());
+        receiveThread = new ReceiveThread("70.12.60.108",8888);
 
         if(receiveThread!=null){
             receiveThread.execute();
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 if (dout != null) {
                     try {
                         dout.writeUTF(msg);
-                        editText.setText("");
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         sendThread.start();
+        editText.setText("");
     }
     public void SendClick(View v) throws IOException {
         sendProgress(editText.getText().toString());
@@ -97,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else {
                 textView.setText(textView.getText().toString()  + (String) values[1] + "\n");
+
             }
         }
 
