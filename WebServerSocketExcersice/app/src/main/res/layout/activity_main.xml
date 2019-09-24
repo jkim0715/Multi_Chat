@@ -27,7 +27,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:hint="채팅"
-            android:scrollbars="vertical" />
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbars="vertical"
+            android:scrollHorizontally="false" />
 
     </LinearLayout>
 

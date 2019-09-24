@@ -1,6 +1,5 @@
 package com.example.webserversocketexcersice;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.AsyncTask;
@@ -42,6 +41,17 @@ public class MainActivity extends AppCompatActivity {
             receiveThread.execute();
         }
     }
+
+    private void scrollBottom(TextView textView) {
+        int lineTop =  textView.getLayout().getLineTop(textView.getLineCount()) ;
+        int scrollY = lineTop - textView.getHeight();
+        if (scrollY > 0) {
+            textView.scrollTo(0, scrollY);
+        } else {
+            textView.scrollTo(0, 0);
+        }
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -99,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
                 socket = (Socket)values[1];
             }
             else {
-                textView.setText(textView.getText().toString()  + (String) values[1] + "\n");
-
+                textView.append("\n"+(String)values[1]);
+                scrollBottom(textView);
             }
         }
 
