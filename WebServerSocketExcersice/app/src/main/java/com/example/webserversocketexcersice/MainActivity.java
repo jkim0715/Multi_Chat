@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.msg);
         textView.setVerticalScrollBarEnabled(true);
         textView.setMovementMethod(new ScrollingMovementMethod());
-        receiveThread = new ReceiveThread("70.12.60.95",8888);
+        receiveThread = new ReceiveThread("70.12.60.108",8888);
 
         if(receiveThread!=null){
             receiveThread.execute();
