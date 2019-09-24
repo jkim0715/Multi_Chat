@@ -120,7 +120,7 @@ public class Client {
 		Client client = null;
 
 		try {
-			client = new Client("70.12.60.106", 8888);
+			client = new Client("70.12.60.108", 8888);
 			client.strat();
 		} catch (Exception e) {
 			e.printStackTrace();
