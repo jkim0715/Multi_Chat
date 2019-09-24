@@ -51,7 +51,7 @@ public class Client {
 		boolean sflag = true;
 		while (sflag) {
 			System.out.println("Input Msg.");
-			String str = sc.next();
+			String str = sc.nextLine();
 			sendMsg(str);
 			if(str.equals("q")) {
 				break;
@@ -115,7 +115,7 @@ public class Client {
 		Client client = null;
 
 		try {
-			client = new Client("70.12.60.108", 8888);
+			client = new Client("70.12.60.106", 8888);
 			client.start();
 
 		} catch (Exception e) {

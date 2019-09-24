@@ -20,6 +20,7 @@ public class Server { // Server는 소켓만 만든다
 	Map<String, DataOutputStream> map = new HashMap<>(); // ip, port
 	Map<String, String> map2 = new HashMap<>(); // ip, id
 	Map<String, String> map3 = new HashMap<>(); // id, ip
+	int num = 1;
 	
 	ServerSocket serverSocket;
 
@@ -155,9 +156,9 @@ public class Server { // Server는 소켓만 만든다
 			
 			ip = socket.getInetAddress().toString();
 			map.put(ip, dout);
-			map2.put(ip, "unknown" + map.size());
-			map3.put("unknown" + map.size(), ip);
-			
+			map2.put(ip, "unknown" + num);
+			map3.put("unknown" + num, ip);
+			num++;
 			System.out.println("접속자수:"+map.size());
 		}
 
@@ -165,20 +166,13 @@ public class Server { // Server는 소켓만 만든다
 			try {
 				while (rflag) {
 					String str = din.readUTF();
-//					System.out.print(socket.getInetAddress()+": ");
-					
-					/*
-					 * if(socket.getInetAddress().toString().equals("/70.12.60.108")) {
-					 * System.out.print("지연 : "); }else
-					 * if(socket.getInetAddress().toString().equals("/70.12.60.106")) {
-					 * System.out.print("재영 : "); }else
-					 * if(socket.getInetAddress().toString().equals("/70.12.60.99")) {
-					 * System.out.print("지훈 : "); }else {
-					 * System.out.print(socket.getInetAddress()+": "); }
-					 */
+
 					
 					if(str.equals("q")) {
+						map3.remove(map2.get(ip));
+						map2.remove(ip);
 						map.remove(ip);
+					
 						System.out.println("Out");
 						System.out.println("접속자수:"+map.size());
 						break;
@@ -189,15 +183,21 @@ public class Server { // Server는 소켓만 만든다
 					if(nic[0].equals("/닉네임")) {
 						if(map2.containsKey(socket.getInetAddress().toString())){
 							map2.replace(socket.getInetAddress().toString(),nic[1]);
-							map3.replace(nic[1], socket.getInetAddress().toString());
+							
+							map3.put(nic[1], socket.getInetAddress().toString());
+						
 						}
 					}
 					
 					else if(nic[0].equals("/귓속말")) {
 						// sendMsg2(ip, msg);
-						if(map2.containsValue(nic[1])){
+						if(map3.containsKey(nic[1])){
 							String ip = map3.get(nic[1]);
+							//To Target
 							sendMsgToTarget(map2.get(socket.getInetAddress().toString()) + " : (귓속말) " + nic[2], ip);
+							//To Me
+							sendMsgToTarget(map2.get(socket.getInetAddress().toString()) + " : (귓속말 to "+nic[1]+") :" + nic[2], socket.getInetAddress().toString());
+							
 						}
 					}
 					
