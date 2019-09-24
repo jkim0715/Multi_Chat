@@ -6,7 +6,7 @@ This Repository is for chatting program called MulChat
 
 ## I. Contents
 
-![System_Architecture](.\img\System_Architecture.png)
+![System_Architecture](./img/System_Architecture.png)
 
 - ChattingServer & Client Application : [ChattingServer](/chattingserver)
   - Client.java
